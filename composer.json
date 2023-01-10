@@ -1,5 +1,5 @@
 {
-    "name": "coderevolutionplugins/gpt-3-encoder-php",
+    "name": "myystigri/gpt-3-encoder-php",
     "description": "PHP BPE Text Encoder for GPT-2 / GPT-3",
     "type": "library",
     "license": "MIT",
@@ -9,6 +9,13 @@
             "email": "support@coderevolution.ro"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Myystigri\\": "src"
+        }
+    },
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "ext-mbstring": "*"
+    }
 }
