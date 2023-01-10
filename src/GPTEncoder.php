@@ -6,7 +6,7 @@ namespace Myystigri;
 
 class GPTEncoder
 {
-    public function encode($text): array
+    public static function encode($text): array
     {
         $bpe_tokens = array();
         if (empty($text)) {
@@ -41,12 +41,12 @@ class GPTEncoder
         $bpe_merges_temp = array_slice($lines, 1, count($lines), true);
         foreach ($bpe_merges_temp as $bmt) {
             $split_bmt = preg_split('#(\s+)#', $bmt);
-            $split_bmt = array_filter($split_bmt, [$this, 'gpt_my_filter']);
+            $split_bmt = array_filter($split_bmt, [(new GPTEncoder()), 'gpt_my_filter']);
             if (count($split_bmt) > 0) {
                 $bpe_merges[] = $split_bmt;
             }
         }
-        $bpe_ranks = $this->gpt_dictZip($bpe_merges, range(0, count($bpe_merges) - 1));
+        $bpe_ranks = (new GPTEncoder())->gpt_dictZip($bpe_merges, range(0, count($bpe_merges) - 1));
 
         $cache = array();
         foreach ($matches[0] as $token) {
@@ -63,11 +63,11 @@ class GPTEncoder
             }
             $result_word = '';
             foreach ($chars as $char) {
-                if (isset($byte_encoder[$this->gpt_unichr($char)])) {
-                    $result_word .= $byte_encoder[$this->gpt_unichr($char)];
+                if (isset($byte_encoder[(new GPTEncoder())->gpt_unichr($char)])) {
+                    $result_word .= $byte_encoder[(new GPTEncoder())->gpt_unichr($char)];
                 }
             }
-            $new_tokens_bpe = $this->gpt_bpe($result_word, $bpe_ranks, $cache);
+            $new_tokens_bpe = (new GPTEncoder())->gpt_bpe($result_word, $bpe_ranks, $cache);
             $new_tokens_bpe = explode(' ', $new_tokens_bpe);
             foreach ($new_tokens_bpe as $x) {
                 if (isset($encoder[$x])) {
